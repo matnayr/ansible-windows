@@ -1,0 +1,40 @@
+[GenericExample:vars]
+
+###########################################################################
+### Ansible Vars
+###########################################################################
+timeout=60
+ansible_become=yes
+ansible_user=ec2-user
+
+
+[GenericExample:children]
+towers
+windows
+support
+
+[towers]
+## These are the towers
+tower1.ab61.internal public_host_name=tower1.ab61.example.opentlc.com ssh_host=tower1.ab61.internal
+tower2.ab61.internal public_host_name=tower2.ab61.example.opentlc.com ssh_host=tower3.ab61.internal
+tower3.ab61.internal public_host_name=tower3.ab61.example.opentlc.com ssh_host=tower2.ab61.internal
+
+
+[windows]
+## These are the activedirectory servers
+ad1.ab61.internal ssh_host=ad1.ab61.example.opentlc.com ansible_password=jVMijRwLbI02gFCo2xkjlZ9lxEA7bm7zgg==
+
+
+## These are the supporthosts
+[support]
+support1.ab61.internal ssh_host=support2.ab61.internal
+support2.ab61.internal ssh_host=support1.ab61.internal
+
+[windows:vars]
+ansible_become=false
+ansible_user=Administrator
+ansible_password=jVMijRwLbI02gFCo2xkjlZ9lxEA7bm7zgg==
+ansible_connection=psrp
+ansible_psrp_auth=basic
+ansible_psrp_cert_validation=ignore
+ansible_psrp_proxy=socks5h://localhost:2222
